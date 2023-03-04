@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Consumer } from "../context";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 class Contact extends Component {
   state = {
-    showContactInfo: true,
+    showContactInfo: false,
   };
 
   onShowClick = (e) => {
@@ -12,7 +14,9 @@ class Contact extends Component {
   };
 
   onDeleteClick = (id, dispatch) => {
-    dispatch({ type: "DELETE_CONTACT", payload: id });
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/users/${id}`)
+      .then((res) => dispatch({ type: "DELETE_CONTACT", payload: id }));
   };
 
   render() {
@@ -34,11 +38,14 @@ class Contact extends Component {
               </h4>
               {showContactInfo ? (
                 <ul className="list-group">
+                  {/* <li className="list-group-item">UserName: {username}</li> */}
                   <li className="list-group-item">Email: {email}</li>
                   <li className="list-group-item">Phone: {phone}</li>
                   <div className="mt-2 d-flex justify-content-end">
                     <button className="btn btn-warning mx-2">
-                      Edit <i className="fas fa-cut"></i>
+                      <Link to={`/contacts/edit/${id}`}>
+                        Edit <i className="fas fa-pencil-alt"></i>
+                      </Link>
                     </button>
                     <button
                       onClick={this.onDeleteClick.bind(this, id, dispatch)}
