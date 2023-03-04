@@ -38,6 +38,8 @@ class AddContact extends Component {
 
     dispatch({ type: "ADD_CONTACT", payload: newContact });
 
+    this.props.history.push("/");
+
     this.setState({
       name: "",
       email: "",
