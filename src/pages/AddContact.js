@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import TextInputGroup from "../components/TextInputGroup";
+import { connect } from "react-redux";
+import { addContact } from "../actions/contactAction";
+import uuid from "uuid";
 
 class AddContact extends Component {
   state = {
@@ -9,7 +12,7 @@ class AddContact extends Component {
     errors: {},
   };
 
-  onSubmit = (dispatch, e) => {
+  onSubmit = (e) => {
     e.preventDefault();
     const { name, email, phone } = this.state;
 
@@ -28,15 +31,14 @@ class AddContact extends Component {
       return;
     }
 
-    // const newContact = {
-    //   name,
-    //   email,
-    //   phone,
-    // };
+    const newContact = {
+      id: uuid(),
+      name,
+      email,
+      phone,
+    };
 
-    // axios
-    //   .post("https://jsonplaceholder.typicode.com/users", newContact)
-    //   .then((res) => dispatch({ type: "ADD_CONTACT", payload: newContact }));
+    this.props.addContact(newContact);
 
     this.props.history.push("/");
 
@@ -58,7 +60,7 @@ class AddContact extends Component {
       <div className="card mb-3">
         <div className="card-header">Add Contact</div>
         <div className="card-body">
-          <form>
+          <form onSubmit={this.onSubmit}>
             <TextInputGroup
               label="Name"
               type="text"
@@ -98,4 +100,4 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+export default connect(null, { addContact })(AddContact);

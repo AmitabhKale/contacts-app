@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { deleteContact } from "../actions/contactAction";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 class Contact extends Component {
   state = {
@@ -11,11 +13,9 @@ class Contact extends Component {
     this.setState({ showContactInfo: !this.state.showContactInfo });
   };
 
-  // onDeleteClick = (id, dispatch) => {
-  //   axios
-  //     .delete(`https://jsonplaceholder.typicode.com/users/${id}`)
-  //     .then((res) => dispatch({ type: "DELETE_CONTACT", payload: id }));
-  // };
+  onDeleteClick = (id) => {
+    this.props.deleteContact(id);
+  };
 
   render() {
     const { id, name, email, phone } = this.props.contact;
@@ -42,7 +42,7 @@ class Contact extends Component {
                 </Link>
               </button>
               <button
-                // onClick={this.onDeleteClick.bind(this, id, dispatch)}
+                onClick={this.onDeleteClick.bind(this, id)}
                 className="btn btn-danger"
               >
                 Delete{" "}
@@ -58,6 +58,7 @@ class Contact extends Component {
 
 Contact.propTypes = {
   contact: PropTypes.object.isRequired,
+  deleteContact: PropTypes.func.isRequired,
 };
 
-export default Contact;
+export default connect(null, { deleteContact })(Contact);

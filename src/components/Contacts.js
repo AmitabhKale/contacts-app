@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { GET_CONTACTS } from "../actions/action-types";
+import { getContacts } from "../actions/contactAction";
 import PropTypes from "prop-types";
 
 import Contact from "./Contact";
@@ -13,6 +13,9 @@ class Contacts extends Component {
     const { contacts } = this.props;
     return (
       <React.Fragment>
+        <h3 className="mb-4">
+          <span className="text-danger">Contacts</span> List
+        </h3>
         {contacts.map((contact) => (
           <Contact key={contact.id} contact={contact} />
         ))}
@@ -30,8 +33,4 @@ const mapStateToProps = (state) => ({
   contacts: state.contact.contacts,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  getContacts: () => dispatch({ type: GET_CONTACTS }),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Contacts);
+export default connect(mapStateToProps, { getContacts })(Contacts);
