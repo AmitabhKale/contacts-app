@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/Header";
 import Contacts from "./components/Contacts";
-import { Provider } from "./context";
 import AddContact from "./pages/AddContact";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import About from "./pages/About";
@@ -14,7 +13,7 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Provider>
+        <div>
           <Header branding="Contacts App" />
           <div className="container">
             <Switch>
@@ -26,7 +25,7 @@ class App extends Component {
               <Route component={NotFound} />
             </Switch>
           </div>
-        </Provider>
+        </div>
       </BrowserRouter>
     );
   }

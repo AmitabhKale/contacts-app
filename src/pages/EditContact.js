@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Consumer } from "../context";
 import axios from "axios";
 import TextInputGroup from "../components/TextInputGroup";
 
@@ -45,19 +44,19 @@ class EditContact extends Component {
       return;
     }
 
-    const updContact = {
-      name,
-      email,
-      phone,
-    };
+    // const updContact = {
+    //   name,
+    //   email,
+    //   phone,
+    // };
 
-    const { id } = this.props.match.params;
-    const res = await axios.put(
-      `https://jsonplaceholder.typicode.com/users/${id}`,
-      updContact
-    );
+    // const { id } = this.props.match.params;
+    // const res = await axios.put(
+    //   `https://jsonplaceholder.typicode.com/users/${id}`,
+    //   updContact
+    // );
 
-    dispatch({ type: "UPDATE_CONTACT", payload: res.data });
+    // dispatch({ type: "UPDATE_CONTACT", payload: res.data });
 
     this.props.history.push("/");
 
@@ -75,52 +74,45 @@ class EditContact extends Component {
   render() {
     const { name, email, phone, errors } = this.state;
     return (
-      <Consumer>
-        {(value) => {
-          const { dispatch } = value;
-          return (
-            <div className="card mb-3">
-              <div className="card-header">Edit Contact Details</div>
-              <div className="card-body">
-                <form onSubmit={this.onSubmit.bind(this, dispatch)}>
-                  <TextInputGroup
-                    label="Name"
-                    type="text"
-                    name="name"
-                    placeholder="Enter Name..."
-                    value={name}
-                    onChange={this.onChange}
-                    error={errors.name}
-                  />
+      <div className="card mb-3">
+        <div className="card-header">Edit Contact Details</div>
+        <div className="card-body">
+          <form>
+            <TextInputGroup
+              label="Name"
+              type="text"
+              name="name"
+              placeholder="Enter Name..."
+              value={name}
+              onChange={this.onChange}
+              error={errors.name}
+            />
 
-                  <TextInputGroup
-                    label="Email"
-                    type="email"
-                    name="email"
-                    placeholder="Enter Email..."
-                    value={email}
-                    onChange={this.onChange}
-                    error={errors.email}
-                  />
+            <TextInputGroup
+              label="Email"
+              type="email"
+              name="email"
+              placeholder="Enter Email..."
+              value={email}
+              onChange={this.onChange}
+              error={errors.email}
+            />
 
-                  <TextInputGroup
-                    label="Phone"
-                    type="text"
-                    name="phone"
-                    placeholder="Enter Phone..."
-                    value={phone}
-                    onChange={this.onChange}
-                    error={errors.phone}
-                  />
-                  <button type="submit" className="btn btn-light btn-block">
-                    Update Contact
-                  </button>
-                </form>
-              </div>
-            </div>
-          );
-        }}
-      </Consumer>
+            <TextInputGroup
+              label="Phone"
+              type="text"
+              name="phone"
+              placeholder="Enter Phone..."
+              value={phone}
+              onChange={this.onChange}
+              error={errors.phone}
+            />
+            <button type="submit" className="btn btn-light btn-block">
+              Update Contact
+            </button>
+          </form>
+        </div>
+      </div>
     );
   }
 }
