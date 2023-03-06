@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
 import TextInputGroup from "../components/TextInputGroup";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { getContact, updateContact } from "../actions/contactAction";
 
 class EditContact extends Component {
   state = {
@@ -10,22 +12,22 @@ class EditContact extends Component {
     errors: {},
   };
 
-  async componentDidMount() {
-    const { id } = this.props.match.params;
-    const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/users/${id}`
-    );
-
-    const contact = res.data;
-
+  componentWillReceiveProps(nextProps, nextState) {
+    const { name, email, phone } = nextProps.contact;
     this.setState({
-      name: contact.name,
-      email: contact.email,
-      phone: contact.phone,
+      name,
+      email,
+      phone,
     });
   }
 
-  onSubmit = async (dispatch, e) => {
+  componentDidMount() {
+    const { id } = this.props.match.params;
+
+    this.props.getContact(id);
+  }
+
+  onSubmit = (e) => {
     e.preventDefault();
     const { name, email, phone } = this.state;
 
@@ -44,27 +46,24 @@ class EditContact extends Component {
       return;
     }
 
-    // const updContact = {
-    //   name,
-    //   email,
-    //   phone,
-    // };
+    const { id } = this.props.match.params;
 
-    // const { id } = this.props.match.params;
-    // const res = await axios.put(
-    //   `https://jsonplaceholder.typicode.com/users/${id}`,
-    //   updContact
-    // );
+    const updContact = {
+      id,
+      name,
+      email,
+      phone,
+    };
 
-    // dispatch({ type: "UPDATE_CONTACT", payload: res.data });
-
-    this.props.history.push("/");
+    this.props.updateContact(updContact);
 
     this.setState({
       name: "",
       email: "",
       phone: "",
     });
+
+    this.props.history.push("/");
   };
 
   onChange = (e) => {
@@ -77,7 +76,7 @@ class EditContact extends Component {
       <div className="card mb-3">
         <div className="card-header">Edit Contact Details</div>
         <div className="card-body">
-          <form>
+          <form onSubmit={this.onSubmit}>
             <TextInputGroup
               label="Name"
               type="text"
@@ -117,4 +116,15 @@ class EditContact extends Component {
   }
 }
 
-export default EditContact;
+EditContact.propTypes = {
+  contact: PropTypes.object.isRequired,
+  getContact: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  contact: state.contact.contact,
+});
+
+export default connect(mapStateToProps, { getContact, updateContact })(
+  EditContact
+);
